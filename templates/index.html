@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Regna Bootstrap Template</title>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="" name="keywords">
+  <meta content="" name="description">
+
+  <!-- JavaScript Libraries -->
+  <script src="../static/js/jquery.min.js"></script>
+  <script src="../static/js/jquery-migrate.min.js"></script>
+  <script src="../static/js/bootstrap.bundle.min.js"></script>
+  <script src="../static/js/easing.min.js"></script>
+  <script src="../static/js/wow.min.js"></script>
+  <script src="../static/js/waypoints.min.js"></script>
+  <script src="../static/js/counterup.min.js"></script>
+  <script src="../static/js/hoverIntent.js"></script>
+  <script src="../static/js/superfish.min.js"></script>
+
+  <!-- Template Main Javascript File -->
+  <script src="../static/js/main.js"></script>
+
+  
+  <!-- Favicons -->
+  <link href="../static/img/favicon.png" rel="icon">
+  <link href="../static/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Poppins:300,400,500,700" rel="stylesheet">
+
+  <!-- Bootstrap CSS File -->
+  <link href="../static/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Libraries CSS Files -->
+  <link href="../static/css/font-awesome.min.css" rel="stylesheet">
+  <link href="../static/css/animate.min.css" rel="stylesheet">
+
+  <!-- Main Stylesheet File -->
+  <link href="../static/css/style.css" rel="stylesheet">
+
+  <!-- =======================================================
+    Theme Name: Regna
+    Theme URL: https://bootstrapmade.com/regna-bootstrap-onepage-template/
+    Author: BootstrapMade.com
+    License: https://bootstrapmade.com/license/
+  ======================================================= -->
+</head>
+
+<body>
+
+  <!--==========================
+  Header
+  ============================-->
+  <header id="header">
+    <div class="container">
+
+      <div id="logo" class="pull-left">
+        <!--a href="#hero"><img src="img/logo.png" alt="" title="" /></img></a-->
+        <!-- Uncomment below if you prefer to use a text logo -->
+        <h1><a href="#hero">Nope</a></h1>
+      </div>
+
+    </div>
+  </header><!-- #header -->
+
+  
+  <!--==========================
+    Hero Section
+  ============================-->
+  <section id="hero">
+    <div class="hero-container">
+      <h1>Welcome to Nope</h1>
+      <h2>Find worthless businesses near you.</h2>
+	  <form id="my_form" action="#portfolio" method="GET"> 
+  <div class="row">
+    <div class="">
+      <div class="input-group">
+        <input type="text" class="search-box" placeholder="Enter your zipcode" name="zipcode" id="txtSearch"/>
+        <div class="input-group-btn">
+          <a onclick="document.getElementById('my_form').submit(); return false;" class="btn-get-started">Search</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+    </div>
+  </section><!-- #hero -->
+  
+  <main id="main">
+    <!--==========================
+      Portfolio Section
+    ============================-->
+    <section id="portfolio">
+      <a name="results"></a>
+      <div class="container wow fadeInUp">
+        <div class="section-header">
+          <h3 class="section-title">Results</h3>
+          <p class="section-description">Select the option with respect to which "worst" is defined.</p>
+        </div>
+        <div class="row">
+
+          <div class="col-lg-12">
+            <ul id="portfolio-flters">
+              <li id="stars-button" onclick="location.href='query_by_star' + window.location.search" data-filter=".filter-app">Stars</li>
+	      {% if data %}
+	      <style>
+		#portfolio-flters #stars-button{
+		background: #2dc997 !important;
+		color: #fff !important;
+		}
+	      </style>
+	      {% endif %}
+	      
+	      <li id="checkin-button" onclick="location.href='query_by_checkin' + window.location.search" data-filter=".filter-card">Check-ins</li>
+	      {% if data2 %}
+	      <style>
+		#portfolio-flters #checkin-button{
+		background: #2dc997 !important;
+		color: #fff !important;
+		}
+	      </style>
+	      {% endif %}
+
+
+	      
+            </ul>
+          </div>
+        </div>
+
+        <div class="row" id="portfolio-wrapper">
+	  {% for item in data %} 
+	  <div class="col-lg-3 col-md-6 portfolio-item filter-app">
+            <a href={{'/query_business?bid='+item.bid}}>
+              <img src="../static/img/portfolio/app1.jpg" alt="">
+              <div class="details">
+                <h4>{{item.name}}</h4>
+                <span>
+		  {% for i in range(item.avg_stars|int) %}
+		  Stars: &#9733
+		  {% endfor %}
+		</span>
+              </div>
+            </a>
+          </div> 
+	  {% endfor %}
+
+	  {% for item in data2 %} 
+	  <div class="col-lg-3 col-md-6 portfolio-item filter-app">
+            <a href={{'/query_business?bid='+item.bid}}>
+              <img src="../static/img/portfolio/app1.jpg" alt="">
+              <div class="details">
+                <h4>{{item.name}}</h4>
+                <span>
+		  Only {{item.total_checkins}} checkin
+		</span>
+              </div>
+            </a>
+          </div> 
+	  {% endfor %}
+
+	  
+
+	  
+      </div>
+    </section><!-- #portfolio -->
+
+  <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+
+  {% if section %}
+  <script>
+    var hash = '{{section}}'
+    document.location.hash = hash;
+  </script>
+  {% endif %}
+
+</body>
+</html>
