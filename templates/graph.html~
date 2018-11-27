@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<script src="https://d3js.org/d3.v5.min.js"></script>
-  <title> HW4 Q3 </title>
-  <title> Yuanchu Dang (yd2466) </title>
+    <link href="../static/grayscale/css/bootstrap.min.css" rel="stylesheet">
+
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <title>Nope Friends Graph</title>
 </head>
 
 <body>
   <script type="text/javascript">
     var width = 1200, 
-        height = 800;
+        height = 700;
     var svg = d3.select("body").append("svg")
                 .attr("width", width)
                 .attr("height", height);
@@ -72,6 +73,8 @@
       });
     });
   </script>
+  <a onclick="javascript:history.back()" style="color: white" class="btn btn-secondary btn-lg">Go back</a>
+  
 </body>
 </html>
 

@@ -57,7 +57,7 @@ def index():
 
 @app.route('/query_friends')
 def query_friends():
-	friends_cmd = 'select uid_from, uid_to from friends_with limit 10000;'
+	friends_cmd = 'select uid_from, uid_to from friends_with limit 220;'
 	edge = g.conn.execute(text(friends_cmd)).fetchall()
 	edge_df = pd.DataFrame(edge)
 	edge_df.columns = ['source', 'target']
@@ -76,9 +76,7 @@ def query_friends():
 	
 	# Run the trimming script
 	import trim2
-	# return jsonify(context)
-	return render_template("q3_1.html")
-	# import pdb; pdb.set_trace()
+	return render_template("graph.html")
 
 @app.route('/query_business', methods=['GET'])
 def query_business():
