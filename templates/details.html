@@ -8,6 +8,8 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
+    <title>Nope</title>
+    
     <!-- Bootstrap core CSS -->
     <link href="../static/grayscale/css/bootstrap.min.css" rel="stylesheet">
 
@@ -18,36 +20,56 @@
 
     <!-- Custom styles for this template -->
     <link href="../static/grayscale/css/grayscale.min.css" rel="stylesheet">
-
+    <link href="../static/grayscale/css/custom.css" rel="stylesheet"> 
   </head>
 
   <body id="page-top">
 
     <!-- Header -->
     <header class="masthead">
-      <div class="container d-flex h-100 align-items-center">
+      <div class="container align-items-center">
         <div class="mx-auto text-center">
-          <h1 class="mx-auto my-0 text-uppercase">Grayscale</h1>
-          <h2 class="text-white-50 mx-auto mt-2 mb-5">{{bid_data.name}}<br/>{{bid_data.review_text}}</h2>
-          <a href="#about" class="btn btn-primary js-scroll-trigger">Get Started</a>
+	  {% if business_data|length == 0 %}
+	  <h1 class="mx-auto text-white text-uppercase">This business is not in our database yet.</h1>
+	  {% else %}
+          <h1 class="mx-auto text-white text-uppercase">{{business_data[0].name}}</h1>
+	  {% endif %}
+	  
+	  {% for item in review_data %}
+          <h2 class="text-white-50 mx-auto mt-2 mb-5">
+	    <blockquote>
+	      {{item.review_text}}
+	      <footer>
+		<cite>
+		  {{item.name}}
+		</cite>
+	      </footer>
+	    </blockquote>
+	  </h2> 
+	  {% endfor %}
+	  {% if review_data|length <= 0%}
+	  <h2 class="text-white-50 mx-auto mt-2 mb-5">No review in our database yet.</h2>
+	  {% endif %}
+
+	  {% if address_data|length <= 0 %}
+	  <h2 class="text-white-50 mx-auto mt-2 mb-5">No address in our database yet.</h2>
+	  {% else %}		       
+          <h2 class="text-white-50 mx-auto mt-2 mb-5">{{address_data[0].city}}, {{address_data[0].state}}, {{address_data[0].zipcode}}</h2>
+	  {% endif %}
+	  
+	  {% if hours_data|length <= 0 %}
+          <h2 class="text-white-50 mx-auto">No hours in our database yet.</h2>	  
+	  {% endif %}
+	  
+	  {% for hour_item in hours_data %}
+          <h2 class="text-white-50 mx-auto">{{hour_item.weekday}}:  {{hour_item.open_time}} ~ {{hour_item.close_time}}</h2>	 
+	  {% endfor %}
+	  </br>
+          <a onclick="javascript:history.back()" class="btn btn-primary js-scroll-trigger">Go Back</a>
         </div>
       </div>
     </header>
-
-    <!-- About Section -->
-    <section id="about" class="about-section text-center">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-8 mx-auto">
-            <h2 class="text-white mb-4">Built with Bootstrap 4</h2>
-            <p class="text-white-50">Grayscale is a free Bootstrap theme created by Start Bootstrap. It can be yours right now, simply download the template on
-              <a href="http://startbootstrap.com/template-overviews/grayscale/">the preview page</a>. The theme is open source, and you can use it for any purpose, personal or commercial.</p>
-          </div>
-        </div>
-        <img src="../static/grayscale/img/ipad.png" class="img-fluid" alt="">
-      </div>
-    </section>
-
+    
     <!-- Bootstrap core JavaScript -->
     <script src="../static/grayscale/js/jquery.min.js"></script>
     <script src="../static/grayscale/js/bootstrap.bundle.min.js"></script>

@@ -58,23 +58,64 @@ def index():
 def query_business():
   bid = request.args.get('bid')
 
-  cmd = '\
+  review_cmd = '\
   WITH worst_review AS (\
     SELECT * FROM\
-    review_made WHERE bid=(:bid) ORDER BY stars LIMIT 1\
+    review_made\
+    WHERE bid=(:bid) AND LENGTH(review_text) < 1000\
+    ORDER BY stars LIMIT 1\
   )\
   SELECT name, review_text FROM\
   yelp_user INNER JOIN worst_review\
   ON yelp_user.uid = worst_review.uid;\
   '
-  cursor = g.conn.execute(text(cmd), bid=bid);
+  review_cursor = g.conn.execute(text(review_cmd), bid=bid)
 
-  results = []
-  for result in cursor:
-    print(result)
-    results.append(result)
+  review_results = []
+  for result in review_cursor:
+    review_results.append(result)
 
-  context = dict(bid_data = results)
+  business_cmd = 'SELECT name FROM business WHERE bid=(:bid)'
+  business_cursor =  g.conn.execute(text(business_cmd), bid=bid)
+  business_results = business_cursor.fetchall()
+  
+  address_cmd = '\
+  SELECT city, state, zipcode\
+  FROM Located_At INNER JOIN Address\
+  ON Located_At.city = Address.city\
+  AND Located_At.state = Address.state\
+  AND Located_At.zipcode = Address.zipcode\
+  WHERE bid=(:bid)'
+  address_cursor = g.conn.execute(text(address_cmd), bid=bid)
+  address_results = address_cursor.fetchall()
+
+  hours_cmd = "\
+  SELECT Hours.weekday,\
+  to_char(Hours.open_time, 'HH12:MI AM') AS open_time,\
+  to_char(Hours.close_time, 'HH12:MI AM') AS close_time\
+  FROM Open_At INNER JOIN Hours\
+  ON Open_At.open_hour=Hours.open_time AND\
+  Open_At.close_hour=Hours.close_time AND\
+  Open_At.weekday=Hours.weekday\
+  WHERE bid=(:bid)\
+  ORDER BY\
+    CASE\
+      WHEN Hours.weekday = 'Sunday' THEN 0\
+      WHEN Hours.weekday = 'Monday' THEN 1\
+      WHEN Hours.weekday = 'Tuesday' THEN 2\
+      WHEN Hours.weekday = 'Wednesday' THEN 3\
+      WHEN Hours.weekday = 'Thursday' THEN 4\
+      WHEN Hours.weekday = 'Friday' THEN 5\
+      WHEN Hours.weekday = 'Saturday' THEN 6\
+    END;"
+  hours_cursor = g.conn.execute(text(hours_cmd), bid=bid)
+  hours_results = hours_cursor.fetchall()
+
+  
+  context = dict(review_data = review_results,
+                 business_data = business_results,
+                 address_data = address_results,
+                 hours_data = hours_results)
 
   return render_template("details.html", **context)
 
@@ -122,8 +163,11 @@ def query_by_checkin():
   SELECT SUM(obtain.count) AS total_checkins,\
   tmp.name,\
   tmp.bid\
-  FROM tmp INNER JOIN obtain\
-  ON tmp.bid = obtain.bid\
+  FROM (tmp INNER JOIN obtain\
+  ON tmp.bid = obtain.bid)\
+  INNER JOIN checkin\
+  ON obtain.weekday = checkin.weekday\
+  AND obtain.hour = checkin.hour\
   GROUP BY tmp.bid, tmp.name\
   ORDER BY total_checkins\
   LIMIT 4;'

@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+  <!-- Our css/js style is inspired by the Regna theme, available at 
+       https://bootstrapmade.com/regna-bootstrap-onepage-template/ -->
+
 <head>
   <meta charset="utf-8">
-  <title>Regna Bootstrap Template</title>
+  <title>Nope</title>
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <meta content="" name="keywords">
   <meta content="" name="description">
@@ -20,12 +23,7 @@
 
   <!-- Template Main Javascript File -->
   <script src="../static/js/main.js"></script>
-
   
-  <!-- Favicons -->
-  <link href="../static/img/favicon.png" rel="icon">
-  <link href="../static/img/apple-touch-icon.png" rel="apple-touch-icon">
-
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Poppins:300,400,500,700" rel="stylesheet">
 
@@ -38,13 +36,6 @@
 
   <!-- Main Stylesheet File -->
   <link href="../static/css/style.css" rel="stylesheet">
-
-  <!-- =======================================================
-    Theme Name: Regna
-    Theme URL: https://bootstrapmade.com/regna-bootstrap-onepage-template/
-    Author: BootstrapMade.com
-    License: https://bootstrapmade.com/license/
-  ======================================================= -->
 </head>
 
 <body>
@@ -56,8 +47,6 @@
     <div class="container">
 
       <div id="logo" class="pull-left">
-        <!--a href="#hero"><img src="img/logo.png" alt="" title="" /></img></a-->
-        <!-- Uncomment below if you prefer to use a text logo -->
         <h1><a href="#hero">Nope</a></h1>
       </div>
 
@@ -66,7 +55,7 @@
 
   
   <!--==========================
-    Hero Section
+    Landing page section
   ============================-->
   <section id="hero">
     <div class="hero-container">
@@ -89,7 +78,7 @@
   
   <main id="main">
     <!--==========================
-      Portfolio Section
+      Portfolio/results Section
     ============================-->
     <section id="portfolio">
       <a name="results"></a>
@@ -132,7 +121,14 @@
 	  {% for item in data %} 
 	  <div class="col-lg-3 col-md-6 portfolio-item filter-app">
             <a href={{'/query_business?bid='+item.bid}}>
-              <img src="../static/img/portfolio/app1.jpg" alt="">
+	      <!-- 
+		   1.jpg: https://i2.pickpik.com/photos/781/599/637/south-tyrol-dolomites-paragliders-black-and-white-thumb.jpg
+		   2.jpg: https://i0.hippopx.com/photos/279/28/966/lake-water-dock-mountains-thumb.jpg
+		   3.jpg: https://i.pinimg.com/736x/59/0f/cd/590fcd2ebbff699574d9ec300a0b349b--tattoo-colors-teal-art.jpg
+		   4.jpg: https://i1.pickpik.com/photos/157/857/150/cloud-fog-cloudy-mountain-thumb.jpg
+		   
+		-->
+              <img src={{'../static/img/' + loop.index|string + '.jpg'}} alt="">
               <div class="details">
                 <h4>{{item.name}}</h4>
                 <span>
@@ -148,7 +144,7 @@
 	  {% for item in data2 %} 
 	  <div class="col-lg-3 col-md-6 portfolio-item filter-app">
             <a href={{'/query_business?bid='+item.bid}}>
-              <img src="../static/img/portfolio/app1.jpg" alt="">
+              <img src={{'../static/img/' + loop.index|string + '.jpg'}} alt="">
               <div class="details">
                 <h4>{{item.name}}</h4>
                 <span>
