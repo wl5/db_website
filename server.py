@@ -7,7 +7,8 @@ Wei Luo (wl2671), Yuanchu Dang (yd2466)
 import os
 from sqlalchemy import *
 from sqlalchemy.pool import NullPool
-from flask import Flask, request, render_template, g, redirect, Response
+from flask import Flask, request, render_template, g, redirect, Response, jsonify
+import pandas as pd 
 
 tmpl_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates/')
 app = Flask(__name__, template_folder=tmpl_dir)
@@ -54,6 +55,31 @@ def index():
 
   return render_template("index.html")
 
+@app.route('/query_friends')
+def query_friends():
+	friends_cmd = 'select uid_from, uid_to from friends_with limit 10000;'
+	edge = g.conn.execute(text(friends_cmd)).fetchall()
+	edge_df = pd.DataFrame(edge)
+	edge_df.columns = ['source', 'target']
+
+	all_nodes = list(set(list(edge_df.source) + list(edge_df.target)))
+	node_to_int = {key: value for (key, value) in zip(all_nodes, range(len(all_nodes)))}
+
+	node_df = pd.DataFrame([str(node_to_int[n]) for n in all_nodes])
+	node_df.columns = ['ID']
+	node_df.to_csv('static/node.csv', index = False, header = True)
+
+	edge_df['source'] = edge_df['source'].apply(lambda x: str(node_to_int[x]))
+	edge_df['target'] = edge_df['target'].apply(lambda x: str(node_to_int[x]))
+	
+	edge_df.to_csv('static/edge.csv', index = False, header = True)
+	
+	# Run the trimming script
+	import trim2
+	# return jsonify(context)
+	return render_template("q3_1.html")
+	# import pdb; pdb.set_trace()
+
 @app.route('/query_business', methods=['GET'])
 def query_business():
   bid = request.args.get('bid')
@@ -80,7 +106,7 @@ def query_business():
   business_results = business_cursor.fetchall()
   
   address_cmd = '\
-  SELECT city, state, zipcode\
+  SELECT Address.city, Address.state, Address.zipcode\
   FROM Located_At INNER JOIN Address\
   ON Located_At.city = Address.city\
   AND Located_At.state = Address.state\
