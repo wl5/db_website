@@ -10,6 +10,20 @@ For this project, I went through the following process:
 
 The following are some screenshots from the websites:
 * Homepage
+![](imgs/1.png)
 * Selecting how "worthless" is defined
+![](imgs/2.png)
 * Results page
+![](imgs/3.png)
 * Friendship graph
+![](imgs/4.png)
+
+You can run the website using 
+```
+python server.py
+```
+and navigate to 
+```
+http://[EXTERNAL_IP]:8111/
+```
+However, keep in mind that the website does need to connect to the original database, which may or may not be still up.
